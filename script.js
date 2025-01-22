@@ -14,12 +14,14 @@ var snakeY = blockSize * 5;
 var velocityX = 0;
 var velocityY = 0;
 
-var snakeBody = []
+var snakeBody = [];
 
 
 // Food
 var foodX;
 var foodY;
+
+var gameOver = false;
 
 
 
@@ -37,6 +39,9 @@ window.onload = function() {
 }
 
 function update() {
+    if(gameOver) {
+        return;
+    }
     context.fillStyle="black";
     context.fillRect(0, 0, board.width, board.height);
 
@@ -51,8 +56,11 @@ function update() {
     for (let i = snakeBody.length-1; i > 0; i--){
         snakeBody[i] = snakeBody[i-1];
     }
+    if(snakeBody.length){
+        snakeBody[0] = [snakeX, snakeY];
+    }
 
-    // !--------------------------------25,34---------
+ 
 
     context.fillStyle="lime";
     snakeX += velocityX * blockSize;
@@ -61,7 +69,17 @@ function update() {
     for (let i = 0; i < snakeBody.length; i++){
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize)
     }
-
+// ! Game Over Conditions
+    if(snakeX < 0 || snakeX > cols*blockSize || snakeY <0 || snakeY > rows*blockSize){
+        gameOver = true;
+        alert("Game Over")
+    }
+    for (let i = 0; i < snakeBody.length; i++){
+        if(snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]){
+            gameOver = true
+            alert("Game Over");
+        }
+    }
 
 }
 function changeDirection(e) {
